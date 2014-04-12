@@ -134,10 +134,10 @@ struct UpdateDownloadSink : public IDownloadSink
     }
 
     Thread& m_thread;
-    size_t m_downloaded, m_total;
-    FILE *m_file;
     std::string m_dir;
     std::string m_path;
+    FILE *m_file;
+    size_t m_downloaded, m_total;
     clock_t m_lastUpdate;
 };
 
@@ -200,7 +200,8 @@ void UpdateDownloader::CleanLeftovers()
 #define FOF_NO_UI 1556
 #endif
 
-    SHFILEOPSTRUCTA fos = {0};
+    SHFILEOPSTRUCTA fos;
+    fos.hwnd = 0;
     fos.wFunc = FO_DELETE;
     fos.pFrom = tmpdir.c_str();
     fos.fFlags = FOF_NO_UI | // Vista+-only

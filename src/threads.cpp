@@ -40,7 +40,7 @@ namespace
 {
 
 // Sets thread's name for the debugger
-void SetThreadName(DWORD threadId, const char *name)
+void SetThreadName(DWORD /*threadId*/, const char */*name*/)
 {
 #ifdef _MSC_VER
     // This code is copied verbatim from MSDN, see

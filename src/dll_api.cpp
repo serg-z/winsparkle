@@ -55,7 +55,7 @@ WIN_SPARKLE_API void __cdecl win_sparkle_init()
         {
             if ( checkUpdates )
             {
-                static const time_t ONE_DAY = 60*60*24;
+//                static const time_t ONE_DAY = 60*60*24;
 
                 time_t lastCheck = 0;
                 Settings::ReadConfigValue("LastCheckTime", lastCheck);

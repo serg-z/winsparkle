@@ -104,7 +104,7 @@ void DoShowElement(wxSizer *s, bool show)
 #define SHOW(c)    DoShowElement(c, true)
 #define HIDE(c)    DoShowElement(c, false)
 
-BOOL CALLBACK GetFirstIconProc(HMODULE hModule, LPCTSTR lpszType, LPTSTR lpszName, LONG_PTR lParam)
+BOOL CALLBACK GetFirstIconProc(HMODULE /*hModule*/, LPCTSTR /*lpszType*/, LPTSTR lpszName, LONG_PTR lParam)
 {
     if (IS_INTRESOURCE(lpszName))
         *((LPTSTR*)lParam) = lpszName;
@@ -694,7 +694,7 @@ void UpdateDialog::DownloadProgress(size_t downloaded, size_t total)
 
     if ( total )
     {
-        if ( m_progress->GetRange() != total )
+        if ( (size_t)m_progress->GetRange() != total )
             m_progress->SetRange(total);
         m_progress->SetValue(downloaded);
         label = wxString::Format
@@ -1075,7 +1075,7 @@ void App::OnUpdateAvailable(wxThreadEvent& event)
 }
 
 
-void App::OnAskForPermission(wxThreadEvent& event)
+void App::OnAskForPermission(wxThreadEvent& /*event*/)
 {
     AskPermissionDialog dlg;
     bool shouldCheck = (dlg.ShowModal() == wxID_OK);

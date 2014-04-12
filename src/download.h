@@ -59,7 +59,7 @@ struct StringDownloadSink : public IDownloadSink
 {
     virtual void SetLength(size_t) {}
 
-    virtual void SetFilename(const std::string& filename) {}
+    virtual void SetFilename(const std::string& /*filename*/) {}
 
     virtual void Add(const void *data, size_t len)
     {
