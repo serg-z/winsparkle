@@ -196,6 +196,10 @@ void UpdateDownloader::CleanLeftovers()
 
     tmpdir.append(1, '\0'); // double NULL-terminate for SHFileOperation
 
+#ifndef FOF_NO_UI
+#define FOF_NO_UI 1556
+#endif
+
     SHFILEOPSTRUCTA fos = {0};
     fos.wFunc = FO_DELETE;
     fos.pFrom = tmpdir.c_str();

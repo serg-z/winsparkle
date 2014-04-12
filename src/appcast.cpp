@@ -29,6 +29,7 @@
 #include <expat.h>
 #include <vector>
 #include <algorithm>
+#include <cstring>
 
 namespace winsparkle
 {

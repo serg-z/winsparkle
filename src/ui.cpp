@@ -53,6 +53,7 @@
 #include <exdisp.h>
 #include <mshtml.h>
 
+#include <winerror.h>
 
 #if !wxCHECK_VERSION(2,9,0)
 #error "wxWidgets >= 2.9 is required to compile this code"
@@ -120,6 +121,10 @@ wxIcon GetApplicationIcon()
 
     LPTSTR iconName = 0;
     EnumResourceNames(hParentExe, RT_GROUP_ICON, GetFirstIconProc, (LONG_PTR)&iconName);
+
+#ifndef ERROR_RESOURCE_ENUM_USER_STOP
+#define ERROR_RESOURCE_ENUM_USER_STOP 15106
+#endif
 
     if ( GetLastError() != ERROR_SUCCESS && GetLastError() != ERROR_RESOURCE_ENUM_USER_STOP )
         return wxNullIcon;
@@ -1095,11 +1100,11 @@ class UIThreadAccess
 public:
     UIThreadAccess() : m_lock(ms_uiThreadCS) {}
 
-    App& App()
+    App& GetApp()
     {
         StartIfNeeded();
         return wxGetApp();
-    };
+    }
 
     bool IsRunning() const { return ms_uiThread != NULL; }
 
@@ -1182,7 +1187,7 @@ void UI::ShutDown()
     if ( !uit.IsRunning() )
         return;
 
-    uit.App().SendMsg(MSG_TERMINATE);
+    uit.GetApp().SendMsg(MSG_TERMINATE);
     uit.ShutDownThread();
 }
 
@@ -1195,7 +1200,7 @@ void UI::NotifyNoUpdates()
     if ( !uit.IsRunning() )
         return;
 
-    uit.App().SendMsg(MSG_NO_UPDATE_FOUND);
+    uit.GetApp().SendMsg(MSG_NO_UPDATE_FOUND);
 }
 
 
@@ -1205,7 +1210,7 @@ void UI::NotifyUpdateAvailable(const Appcast& info)
     UIThreadAccess uit;
     EventPayload payload;
     payload.appcast = info;
-    uit.App().SendMsg(MSG_UPDATE_AVAILABLE, &payload);
+    uit.GetApp().SendMsg(MSG_UPDATE_AVAILABLE, &payload);
 }
 
 
@@ -1216,7 +1221,7 @@ void UI::NotifyDownloadProgress(size_t downloaded, size_t total)
     EventPayload payload;
     payload.sizeDownloaded = downloaded;
     payload.sizeTotal = total;
-    uit.App().SendMsg(MSG_DOWNLOAD_PROGRESS, &payload);
+    uit.GetApp().SendMsg(MSG_DOWNLOAD_PROGRESS, &payload);
 }
 
 
@@ -1226,7 +1231,7 @@ void UI::NotifyUpdateDownloaded(const std::string& updateFile)
     UIThreadAccess uit;
     EventPayload payload;
     payload.updateFile = updateFile;
-    uit.App().SendMsg(MSG_UPDATE_DOWNLOADED, &payload);
+    uit.GetApp().SendMsg(MSG_UPDATE_DOWNLOADED, &payload);
 }
 
 
@@ -1238,7 +1243,7 @@ void UI::NotifyUpdateError()
     if ( !uit.IsRunning() )
         return;
 
-    uit.App().SendMsg(MSG_UPDATE_ERROR);
+    uit.GetApp().SendMsg(MSG_UPDATE_ERROR);
 }
 
 
@@ -1246,7 +1251,7 @@ void UI::NotifyUpdateError()
 void UI::ShowCheckingUpdates()
 {
     UIThreadAccess uit;
-    uit.App().SendMsg(MSG_SHOW_CHECKING_UPDATES);
+    uit.GetApp().SendMsg(MSG_SHOW_CHECKING_UPDATES);
 }
 
 
@@ -1254,7 +1259,7 @@ void UI::ShowCheckingUpdates()
 void UI::AskForPermission()
 {
     UIThreadAccess uit;
-    uit.App().SendMsg(MSG_ASK_FOR_PERMISSION);
+    uit.GetApp().SendMsg(MSG_ASK_FOR_PERMISSION);
 }
 
 } // namespace winsparkle
