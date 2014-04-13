@@ -35,6 +35,8 @@
 #include <rpc.h>
 #include <time.h>
 
+#include <shellapi.h>
+
 namespace winsparkle
 {
 
@@ -201,7 +203,9 @@ void UpdateDownloader::CleanLeftovers()
 #endif
 
     SHFILEOPSTRUCTA fos;
-    fos.hwnd = 0;
+
+    ZeroMemory(&fos, sizeof(SHFILEOPSTRUCTA));
+
     fos.wFunc = FO_DELETE;
     fos.pFrom = tmpdir.c_str();
     fos.fFlags = FOF_NO_UI | // Vista+-only
