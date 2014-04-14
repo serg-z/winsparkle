@@ -1004,6 +1004,8 @@ void App::ShowWindow()
 {
     wxASSERT( m_win );
 
+    m_win->CenterOnScreen();
+
     m_win->Freeze();
     m_win->Show();
     m_win->Thaw();
