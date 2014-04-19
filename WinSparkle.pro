@@ -15,8 +15,9 @@ DEFINES += BUILDING_WIN_SPARKLE __WXMSW__ _UNICODE
 WX_VERSION = 30
 
 CONFIG(debug, debug|release) {
-    DEFINES += NDEBUG
     WX_SUFFIX = d
+} else {
+    DEFINES += NDEBUG
 }
 
 LIBS += \
